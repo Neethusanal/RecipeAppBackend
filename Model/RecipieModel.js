@@ -1,9 +1,9 @@
 const mongoose=require('mongoose');
-const IngredientsModel = require('./IngredientModel');
-const recipeSchema = new Schema({
+
+const recipeSchema = new mongoose. Schema({
     title: { type: String, required: true },
     description: { type: String },
-    ingredients: [IngredientsModel],
+    ingredients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ingredients' }],
     instructions: { type: String, required: true },
     prepTime: { type: Number }, // in minutes
     cookTime: { type: Number }, // in minutes
