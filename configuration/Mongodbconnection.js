@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -6,16 +7,21 @@ dotenv.config();
 const uri = process.env.mongodbURL
 
 // Create a new MongoClient
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// Connect to the MongoDB cluster
-async function connectToMongoDB() {
-    try {
-        await client.connect();
-        console.log('Connected to MongoDB Atlas');
-    } catch (err) {
-        console.error('Error connecting to MongoDB Atlas', err);
-    }
-}
-
-connectToMongoDB();
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 30000
+  });
+  
+  mongoose.connection.on('connected', () => {
+    console.log('Mongoose connected to DB');
+  });
+  
+  mongoose.connection.on('error', (err) => {
+    console.log('Mongoose connection error:', err);
+  });
+  
+  mongoose.connection.on('disconnected', () => {
+    console.log('Mongoose disconnected');
+  });
